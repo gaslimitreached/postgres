@@ -13,7 +13,7 @@ Construct SQL queries with the `sql` [template literal tag](https://developer.mo
 The AWS RDS Proxy creates a [pooled database connection](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/rds-proxy.howitworks.html#rds-proxy-connection-pooling) for you and connects to the database specefied in the `process.env.POSTGRES_URL` environment variable.
 
 ```javascript
-import { sql } from '@cachemonet/postgres;
+import { sql } from '@cachemonet/postgres';
 
 const likes = 100;
 const { rows, fields } = await sql`SELECT * FROM posts WHERE likes > ${likes}`;

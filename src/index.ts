@@ -1,10 +1,19 @@
+import { Signer } from '@aws-sdk/rds-signer';
 import { Client, ClientConfig, Pool, PoolConfig } from 'pg';
-import { getPostgresPassword } from './secretsmanager';
 import { formatSql } from './tools';
 
 const database = process.env.DATABASE_NAME as string;
 const host = process.env.POSTGRES_URL as string;
 const user = process.env.POSTGRES_USER as string;
+const region = process.env.REGION as string;
+const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 5432;
+
+const signer = new Signer({
+  hostname: host,
+  port,
+  region,
+  username: user,
+});
 
 function _createClient(clientConfig: ClientConfig) {
   return new Client(clientConfig);
@@ -15,8 +24,8 @@ async function _createDefaultClient() {
     host,
     user,
     database,
-    port: 5432,
-    password: await getPostgresPassword(),
+    port,
+    password: (() => signer.getAuthToken()),
     ssl: true,
   });
 }
@@ -58,7 +67,7 @@ export function createPool(connectionString?: string) {
     idleTimeoutMillis: 10_000,
     max: 20,
     allowExitOnIdle: true,
-    password: getPostgresPassword,
+    password: (() => signer.getAuthToken()),
     ssl: true,
   });
 }

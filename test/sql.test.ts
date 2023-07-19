@@ -14,9 +14,13 @@ jest.mock('pg', () => {
   };
 });
 
-jest.mock('../src/secretsmanager', () => {
+jest.mock('@aws-sdk/rds-signer', () => {
   return {
-    getPostgresPassword: jest.fn(() => 'password'),
+    Signer: jest.fn(() => {
+      return {
+        getAuthToken: jest.fn(),
+      };
+    }),
   };
 });
 

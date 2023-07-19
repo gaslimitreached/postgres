@@ -76,7 +76,7 @@
       "type": "build"
     },
     {
-      "name": "@aws-sdk/client-secrets-manager",
+      "name": "@aws-sdk/rds-signer",
       "type": "runtime"
     },
     {
